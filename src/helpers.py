@@ -1,9 +1,12 @@
 ### Helpers for the data processing
+import numpy as np
 import pandas as pd
+import cpi
 from collections import namedtuple
 
+
 def get_characters():
-    columns = ["WikiID", "FreebaseID", "ReleaseDate", "CharacterName", "ActorDOB", "ActorGender", "ActorHeight", "ActorEthnicity", "ActorName", "ActorAge", "FreebaseCharacterActorMapId", "FreebaseCharacterID", "FreebaseActorID"]
+    columns = ["WikiID", "MovieID", "ReleaseDate", "CharacterName", "ActorDOB", "ActorGender", "ActorHeight", "ActorEthnicity", "ActorName", "ActorAge", "FreebaseCharacterActorMapId", "FreebaseCharacterID", "FreebaseActorID"]
     return pd.read_csv('../data/character.metadata.tsv', sep='\t', names=columns, index_col=False)
 
 def get_freebase_value(s):
@@ -40,6 +43,12 @@ def get_movies():
     genres = movies["Genres"]
     split_genres = genres.apply(lambda x: str.split(x, ','))
     movies["Genres"] = split_genres.apply(lambda x: [Genre(get_freebase_value(g), get_freebase_id(g)) for g in x])
+
+    movies["ReleaseDate"] = pd.to_datetime(movies["ReleaseDate"])
+    movies["Year"] = movies["ReleaseDate"].apply(lambda x: x.year)
+    movies["InflationAdjustedRevenue"] = movies.apply(
+        lambda movie: cpi.inflate(movie["BoxOfficeRevenue"], int(movie["Year"]), to=2021) if not np.isnan(movie["Year"]) and movie["Year"] >= 1913 else np.nan, axis=1)
+
     return movies
 
 def get_plot_summaries():
