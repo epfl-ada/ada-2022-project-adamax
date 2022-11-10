@@ -1,3 +1,9 @@
+# Ignore everything
 *
 
+# Exept these
 !.gitignore
+!README.md
+
+# Also in subdirectories
+!*/
