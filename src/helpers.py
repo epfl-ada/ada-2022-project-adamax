@@ -150,4 +150,18 @@ def get_corenlp_father_words(count):
         root = tree.getroot()
         get_father_info(root)
         
+    # Write the results to two separate files as json
+    with open('../data/corenlp_plot_summaries/father_dependent_words.json', 'w') as fp:
+        json.dump(father_dependent_words, fp)
+    with open('../data/corenlp_plot_summaries/father_governor_words.json', 'w') as fp:
+        json.dump(father_governor_words, fp)
+
+    return father_dependent_words, father_governor_words
+
+# Get father words from json files
+def get_father_words_from_json():
+    with open('../data/corenlp_plot_summaries/father_dependent_words.json') as json_file:
+        father_dependent_words = json.load(json_file)
+    with open('../data/corenlp_plot_summaries/father_governor_words.json') as json_file:
+        father_governor_words = json.load(json_file)
     return father_dependent_words, father_governor_words
