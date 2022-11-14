@@ -108,7 +108,7 @@ def unzip_corenlp_plot_summaries():
         os.remove(gz_file)
 
 
-def get_corenlp_father_words(count):
+def get_corenlp_father_words():
     # Father reference words
     father_reference_words = ["father", "dad", "papa"]
 
@@ -119,13 +119,13 @@ def get_corenlp_father_words(count):
     # Parse and print out father information
     def get_father_info(root):
         for dep in root.iter('dep'):
-            if dep.find("governor").text in father_reference_words:
+            if dep.find("governor").text.lower() in father_reference_words:
                 if dep.find("dependent").text in father_dependent_words:
                     father_dependent_words[dep.find("dependent").text] += 1
                 else:
                     father_dependent_words[dep.find("dependent").text] = 1
 
-            if dep.find("dependent").text in father_reference_words:
+            if dep.find("dependent").text.lower() in father_reference_words:
                 if dep.find("governor").text in father_governor_words:
                     father_governor_words[dep.find("governor").text] += 1
                 else:
@@ -140,12 +140,8 @@ def get_corenlp_father_words(count):
             if file.endswith('.xml'):
                 xml_files.append(os.path.join(subdir, file))
 
-    x = 0
     # Parse each xml file (count for short circuiting)
     for xml_file in xml_files:
-        if x > count:
-            break
-        x += 1
         tree = ET.parse(xml_file)
         root = tree.getroot()
         get_father_info(root)
