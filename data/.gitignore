@@ -4,8 +4,5 @@
 # Exept these
 !.gitignore
 !README.md
-!corenlp_plot_summaries/father_dependent_words.json
-!corenlp_plot_summaries/father_governor_words.json
-
 # Also in subdirectories
 !*/
