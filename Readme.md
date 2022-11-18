@@ -94,3 +94,6 @@ After finding the common characteristics of the failing movies, we will try to f
 | Anton | Conduct the observational study | 
 | Hédi | Failures by different time period |
 | Son | Trope analysis <br> Sentiment analysis <br> Observational study|
+
+## Reference
+[1] https://en.wikipedia.org/wiki/List_of_biggest_box-office_bombs
