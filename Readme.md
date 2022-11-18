@@ -20,7 +20,7 @@ The research questions we want to answer with our analysis are:
 
 In addition to the provided CMU Movie Summary Corpus, we use the following additional datasets:
 
-### [IMDb dataset](https://www.kaggle.com/datasets/rounakbanik/the-movies-dataset).
+### [IMDb dataset](https://www.kaggle.com/datasets/rounakbanik/the-movies-dataset)
 
 This dataset is similar to our original dataset, but provides additional information about the user ratings, budget. production companies, etc. To merge this dataset with the original one, we scraped the IMDb ids related to the movies in our original dataset thus connecting the two datasets.
 
@@ -53,13 +53,18 @@ After retrieving the failing movies, we will study if they are similar in terms 
 
 In terms of genre, we wanted to find out which genres had the highest relative frequency of failing movies. The following barplot shows the genres with the highest failure rate.
 
-![Failures by genre](img/failure-by-genre.png)
+<p align="center">
+  <img src="img/failure-by-genre.png" style="width: 600px;"/>
+</p>
+
 
 **Trope analysis**
 
 In the trope analysis, we want to understand whether a movie contains tropes that might explain why that movie failed. We use the presence or absence of a trope to predict whether the movie contains the trope “BoxOfficeBomb” using logistic regression. We choose the indicators of the presence of the 100 most common tropes in the dataset as the features. Next, we consider the strength and p-values of these features, and end up with some tropes that might explain why a movie failed.
 
-![Trope analysis](img/tropes.jpeg)
+<p align="center">
+  <img src="img/tropes.jpeg" style="width: 600px;"/>
+</p>
 
 In more advanced analysis of tropes, we plan to analyze movies with the same tropes, especially the ones that are highly predictive of the “BoxOfficeBomb” label, but different in the label and explain this difference.
 
@@ -82,10 +87,10 @@ After finding the common characteristics of the failing movies, we will try to f
 |23.12|Finish the data story<br>Final project submission|
 
 ## Team organization
-| Tables   |      Are      |
+| Member   |      Tasks      |
 |----------|:-------------:|
 | Everybody | Writing the data story |
 | Ana | Analyze if the actors' and budgets' effects <br> Hosting the data story website |
 | Anton | Conduct the observational study | 
-| Hédi | |
-| Son | |
+| Hédi | Failures by different time period |
+| Son | Trope analysis <br> Sentiment analysis <br> Observational study|
