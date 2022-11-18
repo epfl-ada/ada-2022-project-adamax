@@ -1,5 +1,7 @@
 # The Big Flop
 
+The conducted analysis can be found on the notebook: `src/initial_analysis.ipynb`
+
 ## Abstract
 
 Producing a flop movie can be a disaster for a studio. Unsuccessful productions, like Cleopatra (1963), have brought film production companies to the verge of bankruptcy. In this project, our goal is to find the typical characteristics of failing movies.
