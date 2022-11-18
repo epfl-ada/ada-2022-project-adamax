@@ -2,15 +2,12 @@
 
 ## Abstract
 
-Producing a flop movie can be a disaster for a studio.
-Unsuccessful productions, like Cleopatra (1963), have brought film production companies to the verge of bankruptcy.
-In this project, our goal is to find the typical charecteristics of failing movies.
+Producing a flop movie can be a disaster for a studio. Unsuccessful productions, like Cleopatra (1963), have brought film production companies to the verge of bankruptcy. In this project, our goal is to find the typical characteristics of failing movies.
 
-In order to do so, we need to define what consitutes a failing movie. 
-We quantify the failure of a movie by two metrics: the profit and the general public's opinion.
-We obtain these metrics from multiple datasets, such as the CMU Movie Summary Corpus, the IMDB dataset, and the TV Tropes Wiki.
+In order to do so, we need to define what constitutes a failing movie. We quantify the failure of a movie by two metrics: the profit and the general public's opinion. We obtain these metrics from multiple datasets, such as the CMU Movie Summary Corpus, the IMDB dataset, and the TV Tropes Wiki.
 
-Having quantified the failure, we are trying understand what factors, such as competition, character tropes or genre, contributing to a movies likelihood of failing. By conducting this investigation, we hope to provide guidance on how to avoid producing a movie that is likely to fail.
+With this quantification of failure, we are trying to understand what factors, such as competition, character tropes or genre, contribute to a movie's likelihood of failing. By conducting this investigation, we hope to provide guidance on how to avoid producing a movie that is likely to fail.
+
 
 ## Research questions
 
@@ -25,13 +22,12 @@ In addition to the provided CMU Movie Summary Corpus, we use the following addit
 
 ### [IMDb dataset](https://www.kaggle.com/datasets/rounakbanik/the-movies-dataset).
 
-This dataset is similar to our original dataset, but provides additional information about the user ratings, budget. production companies, etc. To merge this dataset with the original one, we scraped the IMDb id's related to the movies in our original dataset thus connecting the two datasets.
+This dataset is similar to our original dataset, but provides additional information about the user ratings, budget. production companies, etc. To merge this dataset with the original one, we scraped the IMDb ids related to the movies in our original dataset thus connecting the two datasets.
 
 ### [TV Tropes Wiki](https://tvtropes.org/pmwiki/pmwiki.php/Main/HomePage)
 
-This webpage contains information about the tropes that appear in movies. We obtained a list with the trope information and joined the tropes with our original dataset by using the movie titles. For simplicity, we discarded the tropes their movie title matched multiple movie titles.
+This webpage contains information about the tropes that appear in movies. We obtained [a dataset](https://paperswithcode.com/dataset/movies-and-tropes-march-2020) containing movies with the trope information and joined the tropes with our original dataset by using the movie titles. For simplicity in the merging process, we discarded all movies with duplicated titles. Within the tropes provided in the dataset, there is the trope “BoxOfficeBomb” which we can use as an indicator for movies that failed.
 
-Additionally, the webpage provides a [list](https://tvtropes.org/pmwiki/pmwiki.php/Main/BoxOfficeBomb) of movies classified as 'Box Office Bombs'. We scraped this list and used it to define failing movies.
 
 ## Methods
 
@@ -45,93 +41,51 @@ To filter the subset of failing movies from the dataset, we used three criteria:
 A movie's profit is calculated as the difference between the movie's budget and the movie's revenue. The profits are adjusted for inflation with U.S.
 Consumer Price index using the [cpi python library](https://palewi.re/docs/cpi/). This adjustment is necessary to allow us to compare the magnitude of failure between movies produced in different years.
 
-Using the profit calculated from the IMBd data is not necessarily a precise quantification of the movie's failure. The budget might not accurately represent the cost of producing the movie and additional costs such as marketing might not be included in the budget. Furthermore, the Box office revenue might not accurately represent the movie's profit for the studio because the revenue is divided by many parties, such as the theaters or distibution companies in addition to the studio. The revenue does not contain the total income genereated by the movie as it only takes into account the theter sales and thus omits profits generated from other sources, such as streaming or merchandise. Even though having a low profit is not a perfect metric for failure, we still assume that it can provide valuable information when deciding whether a movie is a failure.
+Using the profit calculated from the IMDb data is not necessarily a precise quantification of the movie's failure [1]. We still assume that it can provide valuable information when deciding whether a movie is a failure.
 
-We decided to use the lowest quartile of the ratings as a threshold for failure. We believe, that being in the lowest quartile of the ratings is a sufficient indicator of a movie's failure.
+We decided to use the lowest quartile of the ratings as a threshold for failure. We believe that being in the lowest quartile of the ratings is a sufficient indicator of a movie's failure.
 
 ### Are there common characteristics between the failing movies?
 
-After retrieving the failing movies, we will study if they are similar in terms of genre, trope analysis, competition, actors, budget and plot sentiment analysis. In future, we could also consider analyzing failing movies in different time periods.
+After retrieving the failing movies, we will study if they are similar in terms of genre, trope analysis and competition. In the future, we could also consider analyzing failing movies in different time periods and the effects of the actors, the budget and the plot sentiments.
 
-In terms of genre, we wanted to find out which genres had the highest relative frequency of failing movies. We preprocessed the genres, reducing them to a set of 210 genres.
+**Genre**
 
-Image, analysis here
+In terms of genre, we wanted to find out which genres had the highest relative frequency of failing movies. The following barplot shows the genres with the highest failure rate.
 
+![Failures by genre](img/failure-by-genre.png)
 
+**Trope analysis**
 
-## Methods (this part should be the longest)
-What counts as failing? Analyzing the bombs from TVTropes
-Create three criteria : failing because of negative profit, bad review
-Analyse the common points and differences among those criterions
+In the trope analysis, we want to understand whether a movie contains tropes that might explain why that movie failed. We use the presence or absence of a trope to predict whether the movie contains the trope “BoxOfficeBomb” using logistic regression. We choose the indicators of the presence of the 100 most common tropes in the dataset as the features. Next, we consider the strength and p-values of these features, and end up with some tropes that might explain why a movie failed.
 
-Explore common characteristics of box-office bombs
-Dividing the dataset into genres and time periods and compare success between them: use t-tests to compare revenue, budget, counts in each genre etc.
-Use a pretrained language model to extract features from plots like sentiment analysis
-Use a pretrained language model to encode plots and analyse the crowding distance of those plot embeddings.
+![Trope analysis](img/tropes.jpeg)
 
-Understand why some movies failed
-    Competition effect:
-See if the fact that another movie was released at the same time has an effect on being a bomb.
-Using plot embeddings, study the same thing considering movies with a “similar” plot.
-    Reaction from audience:
-Sdf
-Sdgsd
-    Studio and Director history:
-Sdgsfd
-g
+In more advanced analysis of tropes, we plan to analyze movies with the same tropes, especially the ones that are highly predictive of the “BoxOfficeBomb” label, but different in the label and explain this difference.
 
-Does playing in a box-office bomb has a particular impact on an actor career?
-Analyse some features in time, consider the release date of the bomb as a breaking point.
+**Competition**
+To analyse the effect of competition on being a failing movie, we will study the causal effect of the number of movies released each week, month or year grouped by genres or countries. As an initial analysis we trained a linear model to predict if a movie is a failure based on those features and additional features like budget, vote_average, popularity. 
 
+The results of this model are slightly different whether we were predicting failures based on reviews or profit. In both cases the number of movies released the same year has a negative effect on the movie's success. In more advanced analysis, we will see if there are more complex relations between the features extracted and movie failures. 
 
-The budgets and revenues are adjusted for inflation using the [Consumer Price Index (CPI)](https://palewi.re/docs/cpi/)
-
-
-Analyse new actor features (age of first appearance, frequency of acting, …) and establish a network of successful and failing actors (?)
-Group the movies by tropes. We can cluster based on the semantic embeddings of the plot summaries (obtained with a pretrained language model). We can identify the tropes of a movie by comparing the embedding of the plot summary of the movie with the embedding of the description of the trope
-
-## Data story (don’t see this part in the example projects the TA sent us)
+### Why does a movie fail and is it possible to avoid producing a failing movie?
+After finding the common characteristics of the failing movies, we will try to find out causal effects behind movie failure. We can attempt to measure the causal relationship by conducting an observational study similar to what we did during week 6 of the course. The process of finding causal features might be difficult considering our features and their limited ability to describe a movie failure. This will be done for the next delivery.
 
 ## Proposed timeline
+| Date   |      Milestone      |
+|----------|:-------------:|
+|18.11|Project 2 submission|
+|25.11|Find the common characteristics in failing movies in terms of actors, budget and plot sentiments (Question 2) <br> Analyze movie failures by time periods  (Question 2)|
+|2.12|Improve the project 2 analysis based on feedback <br> Homework 2 Submission|
+|9.12|Find causal effects behind movie failure (Question 3)<br>Start working on the Data story|
+|16.12|Finish analysis<br>Write the data story|
+|23.12|Finish the data story<br>Final project submission|
 
-21 - 27/11:
-28/11 - 4/12:  
-5 - 11/12:
-12 - 18/12:
-19 - 23/12 (deadline):
-
-
-
-## Done for Milestone 2
-Merge IMDb dataset with CMF dataset
-Scrape the budgets from wikipedia
-Scrape the box office bombs from tvtropes.org
-Scrape the tropes + initial analysis
-
-
-TODO’s:
-General statistics: revenues, budgets
-Common genres?
-Reasons of failure?
-Ratings
-Director
-Box office bomb
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+## Team organization
+| Tables   |      Are      |
+|----------|:-------------:|
+| Everybody | Writing the data story |
+| Ana | Analyze if the actors' and budgets' effects <br> Hosting the data story website |
+| Anton | Conduct the observational study | 
+| Hédi | |
+| Son | |
