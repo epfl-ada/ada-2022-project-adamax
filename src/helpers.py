@@ -21,7 +21,7 @@ def get_characters():
     return pd.read_csv(f'{movieSummariesPath}/character.metadata.tsv', sep='\t', names=columns, index_col=False)
 
 
-def get_movies(movieSummariesPath, imdbPath):
+def get_movies():
     # CMU dataset
     cmu_movies = pd.read_csv(f'{movieSummariesPath}/movie.metadata.csv', index_col=0)
     cmu_movies["genres"] = cmu_movies["genres"].apply(lambda x: json.loads(x))
