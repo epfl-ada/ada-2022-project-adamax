@@ -1,6 +1,6 @@
 # The Big Flop
 
-The conducted analysis can be found on the notebook: `src/initial_analysis.ipynb` and the data story from `antonpirhonen.github.io/ada-data-story`
+The conducted analysis can be found on the notebook: `src/final_analysis.ipynb` and the data story from `antonpirhonen.github.io/ada-data-story`
 
 ## Abstract
 
