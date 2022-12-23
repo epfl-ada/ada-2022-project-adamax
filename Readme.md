@@ -55,8 +55,8 @@ Keywords are a good indicator of the movie topic. We cluster the keywords into t
 | Member   |      Tasks      |
 |----------|:-------------:|
 | Everybody | Writing the data story |
-| Ana | Data processing, general analysis, genre analysis <br> Hosting the data story website |
-| Anton | Data processing, general analysis <br> Working on the data story website | 
+| Ana | Data processing, general analysis, genre analysis <br> Working on the data story website  |
+| Anton | Data processing, general analysis <br> Hosting the data story website | 
 | Hédi | General analysis, descriptive analysis <br> finding features, regression analysis, actor analysis |
 | Son | Regression and classification analysis <br> keyword analysis, trying out different models |
 
