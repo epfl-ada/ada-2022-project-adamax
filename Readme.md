@@ -1,22 +1,19 @@
 # The Big Flop
 
-The conducted analysis can be found on the notebook: `src/initial_analysis.ipynb`
+The conducted analysis can be found on the notebook: `src/initial_analysis.ipynb` and the data story from `antonpirhonen.github.io/ada-data-story`
 
 ## Abstract
 
-Producing a flop movie can be a disaster for a studio. Unsuccessful productions, like Cleopatra (1963), have brought film production companies to the verge of bankruptcy. In this project, our goal is to find the typical characteristics of failing movies.
-
-In order to do so, we need to define what constitutes a failing movie. We quantify the failure of a movie by two metrics: the profit and the general public's opinion. We obtain these metrics from multiple datasets, such as the CMU Movie Summary Corpus, the IMDB dataset, and the TV Tropes Wiki.
-
-With this quantification of failure, we are trying to understand what factors, such as competition, character tropes or genre, contribute to a movie's likelihood of failing. By conducting this investigation, we hope to provide guidance on how to avoid producing a movie that is likely to fail.
-
+In this project, we analyze low-rated movies and see what are their typical characteristics.
+We obtain the movie data from two main sources: the CMU Movie Summary Corpus and the IMDB dataset.
+During the project, we investigate how the factors, such as competition, movie topic and genre, contribute to a movie's rating.
+By conducting this investigation, we hope to provide guidance on how to avoid producing a movie that is likely to receive bad reviews.
 
 ## Research questions
 
 The research questions we want to answer with our analysis are:
-1. What movies can be considered as failures?
-2. Are there common characteristics between the failing movies?
-3. Why does a movie fail and is it possible to avoid producing a failing movie?
+1. Are there common characteristics between the failing movies?
+2. Why does a movie fail and is it possible to predict which movie fails?
 
 ## Proposed additional datasets
 
@@ -24,56 +21,37 @@ In addition to the provided CMU Movie Summary Corpus, we use the following addit
 
 ### [IMDb dataset](https://www.kaggle.com/datasets/rounakbanik/the-movies-dataset)
 
-This dataset is similar to our original dataset, but provides additional information about the user ratings, budget. production companies, etc. To merge this dataset with the original one, we scraped the IMDb ids related to the movies in our original dataset thus connecting the two datasets.
-
-### [TV Tropes Wiki](https://tvtropes.org/pmwiki/pmwiki.php/Main/HomePage)
-
-This webpage contains information about the tropes that appear in movies. We obtained [a dataset](https://paperswithcode.com/dataset/movies-and-tropes-march-2020) containing movies with the trope information and joined the tropes with our original dataset by using the movie titles. For simplicity in the merging process, we discarded all movies with duplicated titles. Within the tropes provided in the dataset, there is the trope “BoxOfficeBomb” which we can use as an indicator for movies that failed.
-
+This dataset is similar to our original dataset, but provides additional information about the movies, such as the user ratings, budget, production companies, keywords etc. To merge this dataset with the original one, we scraped the IMDb ids related to the movies in our original dataset thus connecting the two datasets.
 
 ## Methods
 
-### What movies can be considered as failures?
+### Researching common characteristics between the failing movies
 
-To filter the subset of failing movies from the dataset, we used three criteria:
-- The movie's profit is negative in the IMDb data.
-- The movie's rating is in the lowest quartile.
-- The movie is classified as a 'Box Office Bomb' in the TV Tropes Wiki.
+For the purposes of this analysis, we defined a low rated movie as a movie having an user rating less than 5.5/10.
+We study if they are similar in terms of genre, budget, revenue, competition and keywords.
+We use both regression and classification methods to answer the research questions.
+Regression methods are used to predict the user rating of a movie based on the features we are interested in, whereas classification methods are used to predict whether a movie is a failure or not.
 
-A movie's profit is calculated as the difference between the movie's budget and the movie's revenue. The profits are adjusted for inflation with U.S.
-Consumer Price index using the [cpi python library](https://palewi.re/docs/cpi/). This adjustment is necessary to allow us to compare the magnitude of failure between movies produced in different years.
-
-Using the profit calculated from the IMDb data is not necessarily a precise quantification of the movie's failure [1]. We still assume that it can provide valuable information when deciding whether a movie is a failure.
-
-We decided to use the lowest quartile of the ratings as a threshold for failure. We believe that being in the lowest quartile of the ratings is a sufficient indicator of a movie's failure.
-
-### Are there common characteristics between the failing movies?
-
-After retrieving the failing movies, we will study if they are similar in terms of genre, trope analysis and competition. In the future, we could also consider analyzing failing movies in different time periods and the effects of the actors, the budget and the plot sentiments.
+### Outlook on the features
 
 **Genre**
-
-In terms of genre, we wanted to find out which genres had the highest relative frequency of failing movies. The following barplot shows the genres with the highest failure rate.
-
-<p align="center">
-  <img src="img/failure-by-genre.png" style="width: 600px;"/>
-</p>
-
-
-**Trope analysis**
-
-In the trope analysis, we want to understand whether a movie contains tropes that might explain why that movie failed. We use the presence or absence of a trope to predict whether the movie contains the trope “BoxOfficeBomb” using logistic regression. We choose the indicators of the presence of the 100 most common tropes in the dataset as the features. Next, we consider the strength and p-values of these features, and end up with some tropes that might explain why a movie failed.
+In terms of genre, we analyzed which genres had the lowest rating. The following violin plot shows the worst rated genres. We used genre as a one-hot encoded variable for the regression analysis.
 
 <p align="center">
-  <img src="img/tropes.jpeg" style="width: 600px;"/>
+  <img src="img/bottom_10_genres.png" style="width: 600px;"/>
 </p>
-
-In more advanced analysis of tropes, we plan to analyze movies with the same tropes, especially the ones that are highly predictive of the “BoxOfficeBomb” label, but different in the label and explain this difference.
 
 **Competition**
-To analyse the effect of competition on being a failing movie, we will study the causal effect of the number of movies released each week, month or year grouped by genres or countries. As an initial analysis we trained a linear model to predict if a movie is a failure based on those features and additional features like budget, vote_average, popularity. 
+To analyse the effect of competition on being a low rated movie, we studied the causal effect of the number of movies released each week, month or year optionally grouped by genres. We trained a linear model to predict if a movie is a failure based on those features and in addition to features like budget, vote_average, popularity. 
 
-The results of this model are slightly different whether we were predicting failures based on reviews or profit. In both cases the number of movies released the same year has a negative effect on the movie's success. In more advanced analysis, we will see if there are more complex relations between the features extracted and movie failures. 
+**Keywords**
+Keywords are a good indicator of the movie topic. We cluster the keywords into topics by considering the list of keywords for each movie as a text document, and then use Latent Dirichlet Allocation (LDA) for topic modelling. Then, we use the most probable topic of a movie to predict its rating.
+
+## Results
+ - Rejected the hypothesis that 
+
+
+
 
 ### Why does a movie fail and is it possible to avoid producing a failing movie?
 After finding the common characteristics of the failing movies, we will try to find out causal effects behind movie failure. We can attempt to measure the causal relationship by conducting an observational study similar to what we did during week 6 of the course. The process of finding causal features might be difficult considering our features and their limited ability to describe a movie failure. This will be done for the next delivery.
@@ -98,4 +76,3 @@ After finding the common characteristics of the failing movies, we will try to f
 | Son | Trope analysis <br> Sentiment analysis <br> Observational study|
 
 ## Reference
-[1] https://en.wikipedia.org/wiki/List_of_biggest_box-office_bombs
