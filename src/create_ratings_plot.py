@@ -21,6 +21,8 @@ for genre in data:
     for movie in data[genre]:
         df = df.append({'genre': genre, 'year': movie[0], 'rate': movie[1]}, ignore_index=True)
 
+# Sort dataframe to alpabetical order by genre and year
+df = df.sort_values(by=['genre', 'year'])
 
 # Create a plotly figure for a lineplot
 fig = px.line(df, x='year', y='rate', color='genre')
